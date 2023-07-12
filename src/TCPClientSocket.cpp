@@ -2,6 +2,15 @@
 
 using namespace SocketManager;
 
+inline struct sockaddr_in create_sockaddr(const Domain domain, const std::string ip, const in_port_t port)
+{
+    sockaddr_in temp;
+    temp.sin_family = domain;
+    temp.sin_port = htons(port);
+    temp.sin_addr.s_addr = inet_addr(ip.c_str());
+    return temp;
+}
+
 TCPClientSocket::TCPClientSocket(const Domain domain, const std::string ip_to_connect, const in_port_t port_to_connect) : Socket(domain, Type::TCP), target_config(create_sockaddr(domain, ip_to_connect, port_to_connect))
 {
     if (connect(this->get_sockfd(), (struct sockaddr *)&(this->target_config), sizeof(this->target_config)) == -1)
@@ -36,13 +45,4 @@ void TCPClientSocket::send_data(const std::string message) const
     {
         throw "Sending package failed.";
     }
-}
-
-inline struct sockaddr_in create_sockaddr(const Domain domain, const std::string ip, const in_port_t port)
-{
-    sockaddr_in temp;
-    temp.sin_family = 
-    temp.sin_port = htons(port);
-    temp.sin_addr.s_addr = inet_addr(ip.c_str());
-    return temp;
 }

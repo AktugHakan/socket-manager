@@ -2,6 +2,15 @@
 
 using namespace SocketManager;
 
+inline struct sockaddr_in create_sockaddr(const Domain domain, const in_port_t port)
+{
+    sockaddr_in temp;
+    temp.sin_addr.s_addr = INADDR_ANY;
+    temp.sin_family = domain;
+    temp.sin_port = htons(port);
+    return temp;
+}
+
 TCPServer::TCPServer(const Domain domain, const Type type, const in_port_t port, const int max_connection) : Socket(domain, type), max_connection(max_connection), self_config(create_sockaddr(domain, port))
 {
     if (bind(this->get_sockfd(), (struct sockaddr *)&(this->self_config), sizeof(this->self_config)) == -1)
@@ -25,13 +34,4 @@ TCPServerSocket TCPServer::wait_for_connection() const
         throw "Connection acception failed.";
     }
     return TCPServerSocket(this->get_domain(), connected_sockfd, this->self_config, client_config);
-}
-
-inline struct sockaddr_in create_sockaddr(const Domain domain, const in_port_t port)
-{
-    sockaddr_in temp;
-    temp.sin_addr.s_addr = INADDR_ANY;
-    temp.sin_family = domain;
-    temp.sin_port = htons(port);
-    return temp;
 }

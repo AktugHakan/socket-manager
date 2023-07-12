@@ -1,3 +1,5 @@
+#pragma once
+
 #include <SocketManager/types.h>
 #include <SocketManager/Socket.h>
 #include <string>
@@ -34,8 +36,8 @@ namespace SocketManager
     class TCPServer : private Socket
     {
     private:
-        const struct sockaddr_in self_config;
         const unsigned max_connection;
+        const struct sockaddr_in self_config;
 
     public:
         TCPServer(const Domain domain, const Type type, const in_port_t, const int max_connection = DEFAULT_MAX_CONNECTION);

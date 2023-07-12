@@ -1,8 +1,13 @@
+#pragma once
+#include <string>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 namespace SocketManager
 {
     // --- CONST AND TYPES ---
     const int DEFAULT_SOCKET_PROTOCOL = 0;
-    const long SOCK_RECV_BUFFER_LEN = 1024*1024;
+    const long SOCK_RECV_BUFFER_LEN = 1024 * 1024;
 
     enum Domain
     {
