@@ -1,10 +1,16 @@
 # Variables
-CXX := g++
 CXXFLAGS := -Wall -Werror -Wextra
 LIBRARY_NAME := libSockets.a
 SRC_DIR := src
 BUILD_DIR := build/obj
 INCLUDE_DIR := include
+
+# Check if cross compile variable is set
+ifeq ($(CROSS_COMPILE),)
+	CXX := g++
+else
+	CXX := $(CROSS_COMPILE)g++
+endif
 
 # Files
 SRC_FILES := $(wildcard $(SRC_DIR)/*.cpp)
