@@ -19,6 +19,7 @@ namespace SocketManager
         TCPClientSocket(const Domain domain, const std::string ip_to_connect, const in_port_t port_to_connect);
         void send_data(const std::string message) const;
         std::string recieve_data() const;
+        using Socket::get_socket_info;
     };
 
     class TCPServerSocket : private Socket
@@ -27,6 +28,7 @@ namespace SocketManager
         TCPServerSocket(const Domain domain, const int sockfd);
         void send_data(const std::string message) const;
         std::string recieve_data() const;
+        using Socket::get_socket_info;
     };
 
     class TCPServer : private Socket
@@ -38,5 +40,6 @@ namespace SocketManager
     public:
         TCPServer(const Domain domain, const Type type, const in_port_t, const int max_connection = DEFAULT_MAX_CONNECTION);
         TCPServerSocket wait_for_connection() const;
+        using Socket::get_socket_info;
     };
 }
