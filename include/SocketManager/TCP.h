@@ -23,12 +23,8 @@ namespace SocketManager
 
     class TCPServerSocket : private Socket
     {
-    private:
-        const struct sockaddr_in self_config;
-        const struct sockaddr_in target_config;
-
     public:
-        TCPServerSocket(const Domain domain, const int sockfd, const struct sockaddr_in self_config, const struct sockaddr_in target_config);
+        TCPServerSocket(const Domain domain, const int sockfd);
         void send_data(const std::string message) const;
         std::string recieve_data() const;
     };

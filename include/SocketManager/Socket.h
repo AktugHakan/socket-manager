@@ -23,5 +23,6 @@ namespace SocketManager
         Socket(const Domain domain, const Type type);
         Socket(const Domain domain, const int sockfd);
         ~Socket();
+        sockaddr_in get_socket_info() const;
     };
 }

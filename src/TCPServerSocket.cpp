@@ -2,7 +2,7 @@
 
 using namespace SocketManager;
 
-TCPServerSocket::TCPServerSocket(const Domain domain, const int sockfd, const struct sockaddr_in self_config, const struct sockaddr_in target_config) : Socket(domain, sockfd), self_config(self_config), target_config(target_config)
+TCPServerSocket::TCPServerSocket(const Domain domain, const int sockfd) : Socket(domain, sockfd)
 {
 }
 
