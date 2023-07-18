@@ -33,5 +33,5 @@ TCPServerSocket TCPServer::wait_for_connection() const
     {
         throw "Connection acception failed.";
     }
-    return TCPServerSocket(this->get_domain(), connected_sockfd, this->self_config, client_config);
+    return TCPServerSocket(this->get_domain(), connected_sockfd);
 }
