@@ -5,7 +5,7 @@
 
 using namespace SocketManager;
 
-Socket::Socket(const Domain domain, const Type type) : sockfd(socket(domain, type, DEFAULT_SOCKET_PROTOCOL)), domain(domain), copied(false)
+Socket::Socket(const Domain domain, const Type type) : sockfd(socket(domain, type, DEFAULT_SOCKET_PROTOCOL)), domain(domain)
 {
     if (this->sockfd == -1)
     {
