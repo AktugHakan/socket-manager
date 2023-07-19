@@ -20,6 +20,7 @@ namespace SocketManager
         void send_data(const std::string message) const;
         std::string recieve_data() const;
         using Socket::get_socket_info;
+        using Socket::shutdown_socket;
     };
 
     class TCPServerSocket : private Socket
@@ -28,7 +29,9 @@ namespace SocketManager
         TCPServerSocket(const Domain domain, const int sockfd);
         void send_data(const std::string message) const;
         std::string recieve_data() const;
+        sockaddr_in get_client_info() const;
         using Socket::get_socket_info;
+        using Socket::shutdown_socket;
     };
 
     class TCPServer : private Socket
@@ -36,11 +39,13 @@ namespace SocketManager
     private:
         const unsigned max_connection;
         const struct sockaddr_in self_config;
+        bool blocking;
 
     public:
         TCPServer(const Domain domain, const Type type, const in_port_t, const int max_connection = DEFAULT_MAX_CONNECTION);
-        TCPServerSocket wait_for_connection() const;
-        TCPServerSocket get_queued_connection() const;
+        TCPServerSocket wait_for_connection();
+        TCPServerSocket get_queued_connection();
         using Socket::get_socket_info;
+        using Socket::shutdown_socket;
     };
 }

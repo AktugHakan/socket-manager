@@ -1,14 +1,21 @@
 #include <SocketManager/TCP.h>
+#include <fcntl.h>
+#include <sys/socket.h>
 
 using namespace SocketManager;
 
 TCPServerSocket::TCPServerSocket(const Domain domain, const int sockfd) : Socket(domain, sockfd)
 {
+    timeval recieve_timeout;
+    recieve_timeout.tv_sec = 0;
+    recieve_timeout.tv_usec = 500000;
+    socklen_t a_len = sizeof(recieve_timeout);
+    setsockopt(this->get_sockfd(), SOL_SOCKET, SO_RCVTIMEO, &recieve_timeout, a_len);
 }
 
 void TCPServerSocket::send_data(const std::string message) const
 {
-    if (send(this->get_sockfd(), message.c_str(), message.length() + 1, 0) == -1)
+    if ((send(this->get_sockfd(), message.c_str(), message.length() + 1, 0) == -1) && (errno != EWOULDBLOCK))
     {
         throw "Sending package failed.";
     }
@@ -18,9 +25,17 @@ std::string TCPServerSocket::recieve_data() const
 {
     char recieved_msg[SOCK_RECV_BUFFER_LEN];
     ssize_t response = recv(this->get_sockfd(), recieved_msg, SOCK_RECV_BUFFER_LEN, 0);
-    if (response == -1)
+    if ((response == -1))
     {
-        throw "Recieving package failed.";
+        if (errno == EWOULDBLOCK)
+        {
+            throw 0;
+        }
+        else
+        {
+            throw "Data recieve failed.";
+        }
+        
     }
     else if (response == 0)
     {
@@ -32,4 +47,12 @@ std::string TCPServerSocket::recieve_data() const
     }
 
     return std::string(recieved_msg);
+}
+
+sockaddr_in TCPServerSocket::get_client_info() const
+{
+    sockaddr_in info;
+    socklen_t info_len = sizeof(info);
+    getpeername(this->get_sockfd(), (sockaddr*)&info, &info_len);
+    return info;
 }

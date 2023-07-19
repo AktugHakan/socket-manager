@@ -1,5 +1,6 @@
 #include <SocketManager/TCP.h>
 #include <errno.h>
+#include <fcntl.h>
 
 using namespace SocketManager;
 
@@ -12,7 +13,7 @@ inline struct sockaddr_in create_sockaddr(const Domain domain, const in_port_t p
     return temp;
 }
 
-TCPServer::TCPServer(const Domain domain, const Type type, const in_port_t port, const int max_connection) : Socket(domain, type), max_connection(max_connection), self_config(create_sockaddr(domain, port))
+TCPServer::TCPServer(const Domain domain, const Type type, const in_port_t port, const int max_connection) : Socket(domain, type), max_connection(max_connection), self_config(create_sockaddr(domain, port)), blocking(true)
 {
     if (bind(this->get_sockfd(), (struct sockaddr *)&(this->self_config), sizeof(this->self_config)) == -1)
     {
@@ -25,10 +26,24 @@ TCPServer::TCPServer(const Domain domain, const Type type, const in_port_t port,
     }
 }
 
-TCPServerSocket TCPServer::wait_for_connection() const
+TCPServerSocket TCPServer::wait_for_connection()
 {
     sockaddr_in client_config;
     socklen_t client_config_size;
+    if (!(this->blocking))
+    {
+        int flags = fcntl(this->get_sockfd(), F_GETFL, 0);
+        if (flags == -1)
+        {
+            throw "Switching to blocking mode for server failed.1";
+        }
+        flags = (flags & ~O_NONBLOCK);
+        if (fcntl(this->get_sockfd(), F_SETFL, flags) == 0)
+        {
+            throw "Switching to blocking mode for server failed.2";
+        }
+        this->blocking = true;
+    }
     int connected_sockfd = accept(this->get_sockfd(), (struct sockaddr *)&(client_config), &client_config_size);
     if (connected_sockfd == -1)
     {
@@ -37,11 +52,26 @@ TCPServerSocket TCPServer::wait_for_connection() const
     return TCPServerSocket(this->get_domain(), connected_sockfd);
 }
 
-TCPServerSocket TCPServer::get_queued_connection() const
+TCPServerSocket TCPServer::get_queued_connection()
 {
     sockaddr_in client_config;
     socklen_t client_config_size;
-    int connected_sockfd = accept4(this->get_sockfd(), (struct sockaddr *)&(client_config), &client_config_size, SOCK_NONBLOCK);
+    if (this->blocking)
+    {
+        int flags = fcntl(this->get_sockfd(), F_GETFL, 0);
+        if (flags == -1)
+        {
+            throw "Switching to non-blocking mode for server failed.1";
+        }
+        flags = (flags | O_NONBLOCK);
+        if (fcntl(this->get_sockfd(), F_SETFL, flags) == -1)
+        {
+            throw "Switching to non-blocking mode for server failed.2";
+        }
+        this->blocking = false;
+    }
+
+    int connected_sockfd = accept(this->get_sockfd(), (struct sockaddr *)&(client_config), &client_config_size);
     if (connected_sockfd == -1)
     {
         if (errno == EWOULDBLOCK)
@@ -56,4 +86,3 @@ TCPServerSocket TCPServer::get_queued_connection() const
     }
     return TCPServerSocket(this->get_domain(), connected_sockfd);
 }
-
