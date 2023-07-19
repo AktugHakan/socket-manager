@@ -8,7 +8,7 @@ TCPServerSocket::TCPServerSocket(const Domain domain, const int sockfd) : Socket
 {
     timeval recieve_timeout;
     recieve_timeout.tv_sec = 0;
-    recieve_timeout.tv_usec = 500000;
+    recieve_timeout.tv_usec = 100000;
     socklen_t a_len = sizeof(recieve_timeout);
     setsockopt(this->get_sockfd(), SOL_SOCKET, SO_RCVTIMEO, &recieve_timeout, a_len);
 }
