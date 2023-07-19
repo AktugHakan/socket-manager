@@ -1,4 +1,5 @@
 #include <SocketManager/TCP.h>
+#include <errno.h>
 
 using namespace SocketManager;
 
@@ -35,3 +36,24 @@ TCPServerSocket TCPServer::wait_for_connection() const
     }
     return TCPServerSocket(this->get_domain(), connected_sockfd);
 }
+
+TCPServerSocket TCPServer::get_queued_connection() const
+{
+    sockaddr_in client_config;
+    socklen_t client_config_size;
+    int connected_sockfd = accept4(this->get_sockfd(), (struct sockaddr *)&(client_config), &client_config_size, SOCK_NONBLOCK);
+    if (connected_sockfd == -1)
+    {
+        if (errno == EWOULDBLOCK)
+        {
+            throw 0;
+        }
+        else
+        {
+            throw "Connection acception failed.";
+        }
+        
+    }
+    return TCPServerSocket(this->get_domain(), connected_sockfd);
+}
+

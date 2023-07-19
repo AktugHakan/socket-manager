@@ -40,6 +40,7 @@ namespace SocketManager
     public:
         TCPServer(const Domain domain, const Type type, const in_port_t, const int max_connection = DEFAULT_MAX_CONNECTION);
         TCPServerSocket wait_for_connection() const;
+        TCPServerSocket get_queued_connection() const;
         using Socket::get_socket_info;
     };
 }
