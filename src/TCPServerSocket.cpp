@@ -59,7 +59,7 @@ sockaddr_in TCPServerSocket::get_client_info() const
     return info;
 }
 
-bool TCPServerSocket::operator==(const TCPServerSocket &to_compare)
+bool TCPServerSocket::operator==(TCPServerSocket const &to_compare)
 {
     return this->get_sockfd() == to_compare.get_sockfd();
 }
