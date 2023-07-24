@@ -32,7 +32,7 @@ namespace SocketManager
         sockaddr_in get_client_info() const;
         using Socket::get_socket_info;
         using Socket::shutdown_socket;
-        bool operator==(TCPServerSocket &to_compare);
+        bool operator==(const TCPServerSocket &to_compare);
     };
 
     class TCPServer : private Socket
