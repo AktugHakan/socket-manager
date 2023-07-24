@@ -49,7 +49,7 @@ TCPServerSocket TCPServer::wait_for_connection()
     {
         throw "Connection acception failed.";
     }
-    return TCPServerSocket(this->get_domain(), connected_sockfd);
+    return TCPServerSocket(this->get_domain(), connected_sockfd, true);
 }
 
 TCPServerSocket TCPServer::get_queued_connection()
@@ -84,5 +84,5 @@ TCPServerSocket TCPServer::get_queued_connection()
         }
         
     }
-    return TCPServerSocket(this->get_domain(), connected_sockfd);
+    return TCPServerSocket(this->get_domain(), connected_sockfd, false);
 }

@@ -26,7 +26,7 @@ namespace SocketManager
     class TCPServerSocket : private Socket
     {
     public:
-        TCPServerSocket(const Domain domain, const int sockfd);
+        TCPServerSocket(const Domain domain, const int sockfd, bool blocking);
         void send_data(const std::string message) const;
         std::string recieve_data() const;
         sockaddr_in get_client_info() const;

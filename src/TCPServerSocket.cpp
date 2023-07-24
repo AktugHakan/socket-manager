@@ -4,13 +4,16 @@
 
 using namespace SocketManager;
 
-TCPServerSocket::TCPServerSocket(const Domain domain, const int sockfd) : Socket(domain, sockfd)
+TCPServerSocket::TCPServerSocket(const Domain domain, const int sockfd, bool blocking) : Socket(domain, sockfd)
 {
-    timeval recieve_timeout;
-    recieve_timeout.tv_sec = 0;
-    recieve_timeout.tv_usec = 100000;
-    socklen_t a_len = sizeof(recieve_timeout);
-    setsockopt(this->get_sockfd(), SOL_SOCKET, SO_RCVTIMEO, &recieve_timeout, a_len);
+    if (!blocking)
+    {
+        timeval recieve_timeout;
+        recieve_timeout.tv_sec = 0;
+        recieve_timeout.tv_usec = 100000;
+        socklen_t a_len = sizeof(recieve_timeout);
+        setsockopt(this->get_sockfd(), SOL_SOCKET, SO_RCVTIMEO, &recieve_timeout, a_len);
+    }
 }
 
 void TCPServerSocket::send_data(const std::string message) const
@@ -35,7 +38,6 @@ std::string TCPServerSocket::recieve_data() const
         {
             throw "Data recieve failed.";
         }
-        
     }
     else if (response == 0)
     {
@@ -53,6 +55,6 @@ sockaddr_in TCPServerSocket::get_client_info() const
 {
     sockaddr_in info;
     socklen_t info_len = sizeof(info);
-    getpeername(this->get_sockfd(), (sockaddr*)&info, &info_len);
+    getpeername(this->get_sockfd(), (sockaddr *)&info, &info_len);
     return info;
 }
