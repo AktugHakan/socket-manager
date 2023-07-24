@@ -58,3 +58,8 @@ sockaddr_in TCPServerSocket::get_client_info() const
     getpeername(this->get_sockfd(), (sockaddr *)&info, &info_len);
     return info;
 }
+
+bool TCPServerSocket::operator==(TCPServerSocket &to_compare)
+{
+    return this->get_sockfd() == to_compare.get_sockfd();
+}
