@@ -47,7 +47,7 @@ TCPServerSocket TCPServer::wait_for_connection()
     int connected_sockfd = accept(this->get_sockfd(), (struct sockaddr *)&(client_config), &client_config_size);
     if (connected_sockfd == -1)
     {
-        throw "Connection acception failed.";
+        throw "Connection acception failed. (sync)";
     }
     return TCPServerSocket(this->get_domain(), connected_sockfd, true);
 }
@@ -80,7 +80,7 @@ TCPServerSocket TCPServer::get_queued_connection()
         }
         else
         {
-            throw "Connection acception failed.";
+            throw "Connection acception failed. (async)";
         }
         
     }
