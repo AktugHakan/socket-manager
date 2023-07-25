@@ -30,7 +30,7 @@ TCPServer::TCPServer(const Domain domain, const Type type, const in_port_t port,
 TCPServerSocket TCPServer::wait_for_connection()
 {
     sockaddr_in client_config;
-    socklen_t client_config_size;
+    socklen_t client_config_size = sizeof(client_config);
     if (!(this->blocking))
     {
         int flags = fcntl(this->get_sockfd(), F_GETFL, 0);
@@ -56,7 +56,7 @@ TCPServerSocket TCPServer::wait_for_connection()
 TCPServerSocket TCPServer::get_queued_connection()
 {
     sockaddr_in client_config;
-    socklen_t client_config_size;
+    socklen_t client_config_size = sizeof(client_config);
     if (this->blocking)
     {
         int flags = fcntl(this->get_sockfd(), F_GETFL, 0);
