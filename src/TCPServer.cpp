@@ -1,6 +1,7 @@
 #include <SocketManager/TCP.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <string>
 
 using namespace SocketManager;
 
@@ -47,7 +48,7 @@ TCPServerSocket TCPServer::wait_for_connection()
     int connected_sockfd = accept(this->get_sockfd(), (struct sockaddr *)&(client_config), &client_config_size);
     if (connected_sockfd == -1)
     {
-        throw "Connection acception failed. (sync)";
+        throw std::string("Connection acception failed. (sync)") + std::to_string(errno);
     }
     return TCPServerSocket(this->get_domain(), connected_sockfd, true);
 }
@@ -80,9 +81,8 @@ TCPServerSocket TCPServer::get_queued_connection()
         }
         else
         {
-            throw "Connection acception failed. (async)";
+            throw std::string("Connection acception failed. (async)") + std::to_string(errno);
         }
-        
     }
     return TCPServerSocket(this->get_domain(), connected_sockfd, false);
 }
