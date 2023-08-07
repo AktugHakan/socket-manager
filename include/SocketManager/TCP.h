@@ -20,8 +20,8 @@ namespace SocketManager
         TCPClientSocket(const Domain domain, const std::string ip_to_connect, const in_port_t port_to_connect);
         void send_string(const std::string message) const;
         std::string recieve_string() const;
-        void send_bytes(const std::vector<uint8_t> &buffer);
-        std::vector<uint8_t> recieve_bytes() const;
+        //void send_bytes(const std::vector<uint8_t> &buffer);
+        //std::vector<uint8_t> recieve_bytes() const;
         using Socket::get_socket_info;
         using Socket::shutdown_socket;
     };
@@ -32,8 +32,8 @@ namespace SocketManager
         TCPServerSocket(const Domain domain, const int sockfd, bool blocking);
         void send_string(const std::string message) const;
         std::string recieve_string() const;
-        void send_bytes(const std::vector<uint8_t> &buffer);
-        std::vector<uint8_t> recieve_bytes() const;
+        //void send_bytes(const std::vector<uint8_t> &buffer);
+        //std::vector<uint8_t> recieve_bytes() const;
         sockaddr_in get_client_info() const;
         using Socket::get_socket_info;
         using Socket::shutdown_socket;
