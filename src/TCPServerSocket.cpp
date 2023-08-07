@@ -48,6 +48,10 @@ std::string TCPServerSocket::recieve_string() const
         throw "Unsufficient reciever buffer size";
     }
 
+    if (recieved_msg[response - 1] == '\0')
+    {
+        response -= 1;
+    }
     return std::string(recieved_msg, response);
 }
 
