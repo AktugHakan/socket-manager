@@ -36,7 +36,7 @@ std::string TCPClientSocket::recieve_string() const
         throw "Unsufficient reciever string buffer size";
     }
 
-    return std::string(recieved_msg);
+    return std::string(recieved_msg, response);
 }
 
 void TCPClientSocket::send_string(const std::string message) const

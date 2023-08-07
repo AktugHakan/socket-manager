@@ -48,7 +48,7 @@ std::string TCPServerSocket::recieve_string() const
         throw "Unsufficient reciever buffer size";
     }
 
-    return std::string(recieved_msg);
+    return std::string(recieved_msg, response);
 }
 
 std::vector<uint8_t> TCPServerSocket::recieve_bytes() const
