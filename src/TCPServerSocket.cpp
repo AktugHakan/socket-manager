@@ -48,36 +48,40 @@ std::string TCPServerSocket::recieve_string() const
         throw "Unsufficient reciever buffer size";
     }
 
+    if (recieved_msg[response - 1] == '\0')
+    {
+        response -= 1;
+    }
     return std::string(recieved_msg, response);
 }
 
-std::vector<uint8_t> TCPServerSocket::recieve_bytes() const
-{
-    uint8_t recieved_msg[SOCK_RECV_BUFFER_LEN];
-    ssize_t response = recv(this->get_sockfd(), recieved_msg, SOCK_RECV_BUFFER_LEN, 0);
-    if (response == -1)
-    {
-        throw "Recieving data failed.";
-    }
-    else if (response == 0)
-    {
-        throw "Sender closed the connection while recieving data.";
-    }
-    else if (response > SOCK_RECV_BUFFER_LEN)
-    {
-        throw "Unsufficient reciever buffer size";
-    }
+// std::vector<uint8_t> TCPServerSocket::recieve_bytes() const
+// {
+//     uint8_t recieved_msg[SOCK_RECV_BUFFER_LEN];
+//     ssize_t response = recv(this->get_sockfd(), recieved_msg, SOCK_RECV_BUFFER_LEN, 0);
+//     if (response == -1)
+//     {
+//         throw "Recieving data failed.";
+//     }
+//     else if (response == 0)
+//     {
+//         throw "Sender closed the connection while recieving data.";
+//     }
+//     else if (response > SOCK_RECV_BUFFER_LEN)
+//     {
+//         throw "Unsufficient reciever buffer size";
+//     }
 
-    return std::vector<uint8_t>(recieved_msg, recieved_msg + (response - 1));
-}
+//     return std::vector<uint8_t>(recieved_msg, recieved_msg + (response - 1));
+// }
 
-void TCPServerSocket::send_bytes(const std::vector<uint8_t> &buffer)
-{
-    if (send(this->get_sockfd(), buffer.data(), buffer.size(), 0) == -1)
-    {
-        throw "Sending package failed.";
-    }
-}
+// void TCPServerSocket::send_bytes(const std::vector<uint8_t> &buffer)
+// {
+//     if (send(this->get_sockfd(), buffer.data(), buffer.size(), 0) == -1)
+//     {
+//         throw "Sending package failed.";
+//     }
+// }
 
 sockaddr_in TCPServerSocket::get_client_info() const
 {
